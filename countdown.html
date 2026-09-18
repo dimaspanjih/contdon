@@ -48,50 +48,50 @@
   <div id="countdown" class="countdown">00:00:00</div>
 </div>
 
-<script>
-(function() {
-  const countdownEl = document.getElementById("countdown");
-
-  const FOUR_HOURS = 4 * 60 * 60 * 1000;
-  const STORAGE_KEY = "tempo_countdown_end";
-
-  let endTime = localStorage.getItem(STORAGE_KEY);
-
-  // Kalau belum ada countdown, mulai 4 jam
-  if (!endTime) {
-    endTime = Date.now() + FOUR_HOURS;
-    localStorage.setItem(STORAGE_KEY, endTime);
-  } else {
-    endTime = parseInt(endTime);
-  }
-
-  function updateCountdown() {
-    const remaining = endTime - Date.now();
-
-    // Countdown habis → mulai lagi 4 jam
-    if (remaining <= 0) {
-      endTime = Date.now() + FOUR_HOURS;
-      localStorage.setItem(STORAGE_KEY, endTime);
-    }
-
-    const totalSeconds = Math.max(
-      0,
-      Math.floor((endTime - Date.now()) / 1000)
-    );
-
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-
-    const pad = (n) => n.toString().padStart(2, "0");
-
-    countdownEl.innerHTML =
-      `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-  }
-
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-})();
+<script> 
+(function() { 
+  const countdownEl = document.getElementById("countdown"); 
+ 
+  const THREE_HOURS = 3 * 60 * 60 * 1000; 
+  const STORAGE_KEY = "tempo_countdown_end"; 
+ 
+  let endTime = localStorage.getItem(STORAGE_KEY); 
+ 
+  // Kalau belum ada countdown, mulai 3 jam 
+  if (!endTime) { 
+    endTime = Date.now() + THREE_HOURS; 
+    localStorage.setItem(STORAGE_KEY, endTime); 
+  } else { 
+    endTime = parseInt(endTime); 
+  } 
+ 
+  function updateCountdown() { 
+    const remaining = endTime - Date.now(); 
+ 
+    // Countdown habis → mulai lagi 3 jam 
+    if (remaining <= 0) { 
+      endTime = Date.now() + THREE_HOURS; 
+      localStorage.setItem(STORAGE_KEY, endTime); 
+    } 
+ 
+    const totalSeconds = Math.max( 
+      0, 
+      Math.floor((endTime - Date.now()) / 1000) 
+    ); 
+ 
+    const hours = Math.floor(totalSeconds / 3600); 
+    const minutes = Math.floor((totalSeconds % 3600) / 60); 
+    const seconds = totalSeconds % 60; 
+ 
+    const pad = (n) => n.toString().padStart(2, "0"); 
+ 
+    countdownEl.innerHTML = 
+      `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`; 
+  } 
+ 
+  updateCountdown(); 
+  setInterval(updateCountdown, 1000); 
+})(); 
 </script>
 
 </body>
