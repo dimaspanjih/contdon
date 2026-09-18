@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,11 +7,13 @@
 <title>Countdown Promo Payday</title>
 
 <style>
+  html,
   body {
     margin: 0;
     padding: 0;
-    background: #f2f2f2;
+    background: transparent !important;
     font-family: Arial, sans-serif;
+    overflow: hidden;
   }
 
   .countdown-wrapper {
@@ -19,10 +22,13 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 9999;
-    width: 1250px;
+    width: 140px;
+    background: transparent;
   }
 
   .countdown {
+    width: 140px;
+    box-sizing: border-box;
     text-align: center;
     background: #d81f26;
     color: #ffffff;
@@ -47,7 +53,7 @@
 (function() {
   const countdownEl = document.getElementById("countdown");
 
-  const FOUR_HOURS = 4 * 60 * 60 * 1000; // 4 jam dalam milidetik
+  const FOUR_HOURS = 4 * 60 * 60 * 1000;
   const STORAGE_KEY = "tempo_countdown_end";
 
   let endTime = localStorage.getItem(STORAGE_KEY);
@@ -67,10 +73,12 @@
     if (remaining <= 0) {
       endTime = Date.now() + FOUR_HOURS;
       localStorage.setItem(STORAGE_KEY, endTime);
-      return;
     }
 
-    const totalSeconds = Math.floor(remaining / 1000);
+    const totalSeconds = Math.max(
+      0,
+      Math.floor((endTime - Date.now()) / 1000)
+    );
 
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -89,3 +97,4 @@
 
 </body>
 </html>
+```
