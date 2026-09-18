@@ -59,7 +59,7 @@
 
   // Kalau belum ada countdown, mulai 4 jam
   if (!endTime) {
-    endTime = Date.now() + THREE_HOURS;
+    endTime = Date.now() + FOUR_HOURS;
     localStorage.setItem(STORAGE_KEY, endTime);
   } else {
     endTime = parseInt(endTime);
@@ -70,7 +70,7 @@
 
     // Countdown habis → mulai lagi 4 jam
     if (remaining <= 0) {
-      endTime = Date.now() + THREE_HOURS;
+      endTime = Date.now() + FOUR_HOURS;
       localStorage.setItem(STORAGE_KEY, endTime);
     }
 
