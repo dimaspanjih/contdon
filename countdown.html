@@ -45,35 +45,31 @@
 
 <script>
 (function() {
-  const targetDate = new Date("2026-09-30T23:59:59").getTime();
   const countdownEl = document.getElementById("countdown");
 
+  const FOUR_HOURS = 4 * 60 * 60;
+  let remaining = FOUR_HOURS;
+
   function updateCountdown() {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
-
-    if (distance <= 0) {
-      countdownEl.innerHTML = "Promo Berakhir";
-      clearInterval(timer);
-      return;
-    }
-
-    const totalHours = Math.floor(distance / (1000 * 60 * 60));
-    const minutes = Math.floor(
-      (distance % (1000 * 60 * 60)) / (1000 * 60)
-    );
-    const seconds = Math.floor(
-      (distance % (1000 * 60)) / 1000
-    );
+    const hours = Math.floor(remaining / 3600);
+    const minutes = Math.floor((remaining % 3600) / 60);
+    const seconds = remaining % 60;
 
     const pad = (n) => n.toString().padStart(2, "0");
 
     countdownEl.innerHTML =
-      `${totalHours}:${pad(minutes)}:${pad(seconds)}`;
+      `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+
+    remaining--;
+
+    // Reset kembali ke 4 jam
+    if (remaining < 0) {
+      remaining = FOUR_HOURS;
+    }
   }
 
   updateCountdown();
-  const timer = setInterval(updateCountdown, 1000);
+  setInterval(updateCountdown, 1000);
 })();
 </script>
 
