@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Countdown Promo Payday</title>
+
 <style>
   body {
     margin: 0;
@@ -14,8 +15,9 @@
 
   .countdown-wrapper {
     position: fixed;
-    bottom: 300px;
-    right: 18px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 9999;
     width: 184px;
   }
@@ -34,6 +36,7 @@
   }
 </style>
 </head>
+
 <body>
 
 <div id="countdown-wrapper" class="countdown-wrapper">
@@ -42,9 +45,7 @@
 
 <script>
 (function() {
-  // Ganti tanggal & jam target sesuai akhir promo
   const targetDate = new Date("2026-09-30T23:59:59").getTime();
-
   const countdownEl = document.getElementById("countdown");
 
   function updateCountdown() {
@@ -57,16 +58,18 @@
       return;
     }
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const totalHours = Math.floor(distance / (1000 * 60 * 60));
+    const minutes = Math.floor(
+      (distance % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    const seconds = Math.floor(
+      (distance % (1000 * 60)) / 1000
+    );
 
     const pad = (n) => n.toString().padStart(2, "0");
 
-    countdownEl.innerHTML = days > 0
-      ? `${days}h ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
-      : `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    countdownEl.innerHTML =
+      `${totalHours}:${pad(minutes)}:${pad(seconds)}`;
   }
 
   updateCountdown();
