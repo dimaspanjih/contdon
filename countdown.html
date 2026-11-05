@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Countdown Promo Payday</title>
-
 <style>
   html,
   body {
@@ -14,7 +13,6 @@
     font-family: Arial, sans-serif;
     overflow: hidden;
   }
-
   .countdown-wrapper {
     position: fixed;
     top: 50%;
@@ -24,7 +22,6 @@
     width: 140px;
     background: transparent;
   }
-
   .countdown {
     width: 140px;
     box-sizing: border-box;
@@ -41,58 +38,65 @@
   }
 </style>
 </head>
-
 <body>
-
 <div id="countdown-wrapper" class="countdown-wrapper">
   <div id="countdown" class="countdown">00:00:00</div>
 </div>
+<script>
+(function() {
+  const countdownEl = document.getElementById("countdown");
+  const STORAGE_KEY = "tempo_countdown_end";
 
-<script> 
-(function() { 
-  const countdownEl = document.getElementById("countdown"); 
- 
-  const THREE_HOURS = 3 * 60 * 60 * 1000; 
-  const STORAGE_KEY = "tempo_countdown_end"; 
- 
-  let endTime = localStorage.getItem(STORAGE_KEY); 
- 
-  // Kalau belum ada countdown, mulai 3 jam 
-  if (!endTime) { 
-    endTime = Date.now() + THREE_HOURS; 
-    localStorage.setItem(STORAGE_KEY, endTime); 
-  } else { 
-    endTime = parseInt(endTime); 
-  } 
- 
-  function updateCountdown() { 
-    const remaining = endTime - Date.now(); 
- 
-    // Countdown habis → mulai lagi 3 jam 
-    if (remaining <= 0) { 
-      endTime = Date.now() + THREE_HOURS; 
-      localStorage.setItem(STORAGE_KEY, endTime); 
-    } 
- 
-    const totalSeconds = Math.max( 
-      0, 
-      Math.floor((endTime - Date.now()) / 1000) 
-    ); 
- 
-    const hours = Math.floor(totalSeconds / 3600); 
-    const minutes = Math.floor((totalSeconds % 3600) / 60); 
-    const seconds = totalSeconds % 60; 
- 
-    const pad = (n) => n.toString().padStart(2, "0"); 
- 
-    countdownEl.innerHTML = 
-      `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`; 
-  } 
- 
-  updateCountdown(); 
-  setInterval(updateCountdown, 1000); 
-})(); 
+  // Jam mulai & selesai (11:00 - 13:00)
+  const START_HOUR = 11;
+  const END_HOUR = 13;
+
+  function getTodayWindow() {
+    const now = new Date();
+    const start = new Date(now);
+    start.setHours(START_HOUR, 0, 0, 0);
+
+    const end = new Date(now);
+    end.setHours(END_HOUR, 0, 0, 0);
+
+    return { start, end };
+  }
+
+  function updateCountdown() {
+    const now = new Date();
+    const { start, end } = getTodayWindow();
+
+    // Di luar jam 11:00 - 13:00 → tampilkan 00:00:00
+    if (now < start || now >= end) {
+      countdownEl.innerHTML = "00:00:00";
+      return;
+    }
+
+    // Di dalam jam 11:00 - 13:00
+    let endTime = localStorage.getItem(STORAGE_KEY);
+
+    // Kalau belum ada / sudah lewat / di luar window → set ulang ke jam 13:00 hari ini
+    if (!endTime || parseInt(endTime) < now.getTime() || parseInt(endTime) > end.getTime()) {
+      endTime = end.getTime();
+      localStorage.setItem(STORAGE_KEY, endTime);
+    } else {
+      endTime = parseInt(endTime);
+    }
+
+    const remaining = Math.max(0, endTime - now.getTime());
+    const totalSeconds = Math.floor(remaining / 1000);
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const pad = (n) => n.toString().padStart(2, "0");
+    countdownEl.innerHTML = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+})();
 </script>
-
 </body>
 </html>
